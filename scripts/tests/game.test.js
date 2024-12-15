@@ -3,7 +3,7 @@
  */
 
 const { getActiveResourcesInfo } = require("process");
-const { game, newGame, showScore, addTurn, lightsOn } = require("../game");
+const { game, newGame, showScore, addTurn, lightsOn, showTurns } = require("../game");
 const { test, expect } = require("@jest/globals");
 
 
@@ -75,5 +75,10 @@ describe("gameplay works correctly", () =>{
         let button = document.getElementById(game.currentGame[0]);
         lightsOn(game.currentGame[0]);
         expect(button.classList).toContain("light");
+    });
+    test("showTurns should update game.turnNumber", () => {
+        game.turnNumber = 42;
+        showTurns();
+        expect(game.turnNumber).toBe(0);
     });
 });
