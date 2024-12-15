@@ -2,7 +2,9 @@
  * @jest-environment jsdom
  */
 
-const { game, newGame, showScore } = require("../game");
+const { getActiveResourcesInfo } = require("process");
+const { game, newGame, showScore, addTurn, lightsOn } = require("../game");
+const { test, expect } = require("@jest/globals");
 
 
 beforeAll(() => {
@@ -45,10 +47,33 @@ describe("newGame works correctly", () => {
     test("should set playerMoves to empty", () => {
         expect(game.playerMoves).toEqual([]);
     });
-    test("should set currentGame to empty", () => {
-        expect(game.currentGame).toEqual([]);
+    test("should be one move in the computer's game array", () => {
+        expect(game.currentGame.length).toBe(1);
     });
     test("should display 0 for element with ID of score", () => {
         expect(document.getElementById("score").innerText).toEqual(0);
     });
-})
+});
+
+describe("gameplay works correctly", () =>{
+    beforeEach(() => {
+        game.score = 0;
+        game.currentGame = [];
+        game.playerMoves = [];
+        addTurn();
+    });
+    afterEach(() => {
+        game.score = 0;
+        game.currentGame = [];
+        game.playerMoves = [];
+    });
+    test("addTurn adds a new turn to the game", () => {
+        addTurn();
+        expect(game.currentGame.length).toBe(2);
+    });
+    test("Should add the correct class to light up the buttons", () => {
+        let button = document.getElementById(game.currentGame[0]);
+        lightsOn(game.currentGame[0]);
+        expect(button.classList).toContain("light");
+    });
+});
